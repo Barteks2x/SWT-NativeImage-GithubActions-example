@@ -1,0 +1,8 @@
+{
+  "resources":[
+    {"pattern":"\\QMETA-INF/services/java.nio.file.spi.FileSystemProvider\\E"},
+    {"pattern":"\\Qswt-win32-4932r18.dll\\E"},
+    {"pattern":"\\Qicon.png\\E"}
+  ],
+  "bundles":[]
+}

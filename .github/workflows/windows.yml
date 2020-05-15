@@ -1,0 +1,58 @@
+# from https://github.com/38leinaD/quarkus-with-gh-actions/blob/903928e232abe32666ab953bd82d641e3be50f41/.github/workflows/windows.yml
+
+name: Windows Build
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: windows-2019
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 1.8
+        uses: DeLaGuardo/setup-graalvm@3
+        with:
+          graalvm-version: '20.0.0.java11'
+      - name: install native-image
+        run: |
+          %JAVA_HOME%/bin/gu.cmd install native-image
+        shell: cmd
+      - name: Build Gradle
+        run: |
+          gradlew -Pswtexample.noversion=true build
+        shell: cmd
+      - name: Build native
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+          %JAVA_HOME%\bin\native-image.cmd -jar build\libs\SWTExample-windows.jar build\libs\SWTExample-windows
+        shell: cmd
+      - name: Disable terminal
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+          EDITBIN /SUBSYSTEM:WINDOWS build\libs\SWTExample-windows.exe
+        shell: cmd
+      - name: Set icon
+        run: |
+          windows-tools\rcedit-x64.exe build\libs\SWTExample-windows.exe --set-icon windows-tools\icon.ico
+        shell: cmd
+      - name: Make zip
+        run: |
+          Compress-Archive -LiteralPath build\libs\SWTExample-windows.exe -DestinationPath build\libs\SWTExample-windows
+        shell: pwsh
+      - name: List files
+        run: |
+          dir build\libs
+        shell: cmd
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path: build\libs\SWTExample-windows.zip
+          asset_name: SWTExample-windows.zip
+          asset_label: win-64
+          asset_content_type: application/octet-stream

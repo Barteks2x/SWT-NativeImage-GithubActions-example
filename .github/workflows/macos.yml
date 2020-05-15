@@ -1,0 +1,54 @@
+name: MacOS Build
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Graalvm
+        uses: DeLaGuardo/setup-graalvm@3
+        with:
+          graalvm-version: '20.0.0.java11'
+      - name: version
+        run: java -version
+      - name: install native-image
+        run: gu install native-image
+      - name: Build Gradle
+        run: ./gradlew -Pswtexample.noversion=true build
+
+      - name: Build Native
+        run: |
+          $JAVA_HOME/bin/native-image -jar build/libs/SWTExample-mac.jar build/libs/SWTExample-mac
+      - name: List files
+        run: |
+          ls -lah build/libs
+      - name: Make app dir
+        run: |
+          mkdir macos-app-files/swtexample.app/Contents/MacOS
+      - name: Copy files to app
+        run: |
+          cp build/libs/SWTExample-mac macos-app-files/swtexample.app/Contents/MacOS/swtexample
+      - name: Make dmg
+        run: |
+          hdiutil create "build/libs/SWTExample-mac-editable.dmg" -ov -volname "SWTExample" -fs HFS+ -srcfolder "macos-app-files"
+      - name: Convert to read only dmg
+        run: |
+          hdiutil convert "build/libs/SWTExample-mac-editable.dmg" -format UDZO -o "build/libs/SWTExample-mac.dmg"
+      - name: List files
+        run: |
+          ls -lah build/libs
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path: ./build/libs/SWTExample-mac.dmg
+          asset_name: SWTExample-mac.dmg
+          asset_label: macos
+          asset_content_type: application/octet-stream

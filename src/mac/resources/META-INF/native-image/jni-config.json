@@ -1,0 +1,65 @@
+[
+{
+  "name":"org.eclipse.swt.internal.cocoa.NSOperatingSystemVersion",
+  "fields":[
+    {"name":"majorVersion"}, 
+    {"name":"minorVersion"}, 
+    {"name":"patchVersion"}
+  ]
+},
+{
+  "name":"org.eclipse.swt.internal.cocoa.NSPoint",
+  "fields":[
+    {"name":"x"}, 
+    {"name":"y"}
+  ]
+},
+{
+  "name":"org.eclipse.swt.internal.cocoa.NSRect",
+  "fields":[
+    {"name":"height"}, 
+    {"name":"width"}, 
+    {"name":"x"}, 
+    {"name":"y"}
+  ]
+},
+{
+  "name":"org.eclipse.swt.internal.cocoa.NSSize",
+  "fields":[
+    {"name":"height"}, 
+    {"name":"width"}
+  ]
+},
+{
+  "name":"org.eclipse.swt.internal.cocoa.objc_super",
+  "fields":[
+    {"name":"receiver"}, 
+    {"name":"super_class"}
+  ]
+},
+  {
+    "name": "org.eclipse.swt.internal.cocoa.OS",
+    "fields": [
+      {"name": "sel_identity"}
+    ]
+  },
+{
+  "name":"org.eclipse.swt.widgets.Display",
+  "methods":[
+    {"name":"observerProc","parameterTypes":["long","long","long"] },
+    {"name":"applicationProc","parameterTypes":["long","long"] },
+    {"name":"applicationProc","parameterTypes":["long","long","long"] },
+    {"name":"applicationProc","parameterTypes":["long","long","long","long"] },
+    {"name":"applicationProc","parameterTypes":["long","long","long","long","long","long"] },
+    {"name":"cursorSetProc","parameterTypes":["long","long"] },
+    {"name":"dialogProc","parameterTypes":["long","long","long"] },
+    {"name":"dialogProc","parameterTypes":["long","long","long","long"] },
+    {"name":"dialogProc","parameterTypes":["long","long","long","long","long"] },
+    {"name":"windowProc","parameterTypes":["long","long"] },
+    {"name":"windowProc","parameterTypes":["long","long","long"] },
+    {"name":"windowProc","parameterTypes":["long","long","long","long"] },
+    {"name":"windowProc","parameterTypes":["long","long","long","long","long"] },
+    {"name":"windowProc","parameterTypes":["long","long","long","long","long","long"] }
+  ]
+}
+]

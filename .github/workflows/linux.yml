@@ -1,0 +1,41 @@
+name: Linux Build
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Graalvm
+        uses: DeLaGuardo/setup-graalvm@3
+        with:
+          graalvm-version: '20.0.0.java11'
+      - name: version
+        run: java -version
+      - name: install native-image
+        run: gu install native-image
+      - name: Build Gradle
+        run: ./gradlew -Pswtexample.noversion=true build
+      - name: Build Native
+        run: |
+          $JAVA_HOME/bin/native-image -jar build/libs/SWTExample-linux.jar build/libs/SWTExample-linux
+      - name: List files
+        run: |
+          ls -lah build/libs
+      - name: Pack tar.gz
+        run: |
+          tar -C build/libs -acvf build/libs/SWTExample-linux.tar.gz SWTExample-linux
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path: ./build/libs/SWTExample-linux.tar.gz
+          asset_name: SWTExample-linux.tar.gz
+          asset_label: macos
+          asset_content_type: application/octet-stream

@@ -1,0 +1,25 @@
+[
+{
+  "name":"org.eclipse.swt.internal.image.GIFFileFormat",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.eclipse.swt.internal.image.JPEGFileFormat",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.eclipse.swt.internal.image.PNGFileFormat",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.eclipse.swt.internal.image.WinBMPFileFormat",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.eclipse.swt.internal.image.WinICOFileFormat",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.eclipse.swt.widgets.Display"
+}
+]
